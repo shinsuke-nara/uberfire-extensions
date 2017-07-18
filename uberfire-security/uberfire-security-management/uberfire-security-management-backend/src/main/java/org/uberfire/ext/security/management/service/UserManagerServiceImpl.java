@@ -30,6 +30,8 @@ import org.uberfire.ext.security.management.api.service.UserManagerService;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import java.util.Collection;
 
 /**
@@ -37,6 +39,7 @@ import java.util.Collection;
  */
 @Service
 @ApplicationScoped
+@Path("user")
 public class UserManagerServiceImpl implements UserManagerService {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserManagerServiceImpl.class);
@@ -89,12 +92,20 @@ public class UserManagerServiceImpl implements UserManagerService {
         return response;        
     }
 
+
+    @Path("{id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Override
-    public User get(String identifier)  {
+    public User get(@PathParam("id") String identifier)  {
         final UserManager serviceImpl = getService();
         return serviceImpl.get(identifier);
     }
 
+    @Path("{id}")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Override
     public User create(User entity)  {
         final UserManager serviceImpl = getService();
@@ -102,6 +113,10 @@ public class UserManagerServiceImpl implements UserManagerService {
 
     }
 
+    @Path("{id}")
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Override
     public User update(User entity)  {
         final UserManager serviceImpl = getService();
@@ -109,6 +124,8 @@ public class UserManagerServiceImpl implements UserManagerService {
 
     }
 
+    @Path("{id}")
+    @DELETE
     @Override
     public void delete(String... identifiers)  {
         final UserManager serviceImpl = getService();
