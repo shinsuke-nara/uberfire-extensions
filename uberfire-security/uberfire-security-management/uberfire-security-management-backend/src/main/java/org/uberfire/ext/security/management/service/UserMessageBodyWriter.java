@@ -1,7 +1,7 @@
 package org.uberfire.ext.security.management.service;
 
 import org.jboss.errai.marshalling.client.Marshalling;
-import org.jboss.errai.security.shared.api.identity.UserImpl;
+import org.jboss.errai.security.shared.api.identity.User;
 
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
@@ -17,7 +17,8 @@ import java.lang.reflect.Type;
 
 @Provider
 @Produces(MediaType.APPLICATION_JSON)
-public class UserMessageBodyWriter implements MessageBodyWriter<UserImpl> {
+public class UserMessageBodyWriter implements MessageBodyWriter<User> {
+    
     @Override
     public boolean isWriteable(
             Class<?> aClass,
@@ -25,12 +26,12 @@ public class UserMessageBodyWriter implements MessageBodyWriter<UserImpl> {
             Annotation[] annotations,
             MediaType mediaType)
     {
-        return aClass == UserImpl.class;
+        return User.class.isAssignableFrom(aClass);
     }
 
     @Override
     public long getSize(
-            UserImpl user,
+            User user,
             Class<?> aClass,
             Type type,
             Annotation[] annotations,
@@ -41,7 +42,7 @@ public class UserMessageBodyWriter implements MessageBodyWriter<UserImpl> {
 
     @Override
     public void writeTo(
-            UserImpl user,
+            User user,
             Class<?> aClass,
             Type type,
             Annotation[] annotations,

@@ -1,7 +1,7 @@
 package org.uberfire.ext.security.management.service;
 
 import org.jboss.errai.marshalling.client.Marshalling;
-import org.jboss.errai.marshalling.client.api.Marshaller;
+import org.jboss.errai.security.shared.api.identity.User;
 import org.jboss.errai.security.shared.api.identity.UserImpl;
 
 import javax.ws.rs.Produces;
@@ -19,7 +19,7 @@ import java.lang.reflect.Type;
 
 @Provider
 @Produces(MediaType.APPLICATION_JSON)
-public class UserMessageBodyReader implements MessageBodyReader<UserImpl> {
+public class UserMessageBodyReader implements MessageBodyReader<User> {
 
     @Override
     public boolean isReadable(
@@ -28,12 +28,12 @@ public class UserMessageBodyReader implements MessageBodyReader<UserImpl> {
             Annotation[] annotations,
             MediaType mediaType)
     {
-        return aClass == UserImpl.class;
+        return User.class.isAssignableFrom(aClass);
     }
 
     @Override
-    public UserImpl readFrom(
-            Class<UserImpl> aClass,
+    public User readFrom(
+            Class<User> aClass,
             Type type,
             Annotation[] annotations,
             MediaType mediaType,
@@ -51,6 +51,6 @@ public class UserMessageBodyReader implements MessageBodyReader<UserImpl> {
         {
             buffer.append(line);
         }
-        return Marshalling.fromJSON(buffer.toString(), UserImpl.class);
+        return (User)Marshalling.fromJSON(buffer.toString(), UserImpl.class);
     }
 }
