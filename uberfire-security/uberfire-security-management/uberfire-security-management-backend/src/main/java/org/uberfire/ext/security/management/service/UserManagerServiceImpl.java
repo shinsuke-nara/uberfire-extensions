@@ -30,6 +30,8 @@ import org.uberfire.ext.security.management.api.service.UserManagerService;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import java.util.Collection;
 
 /**
@@ -37,6 +39,7 @@ import java.util.Collection;
  */
 @Service
 @ApplicationScoped
+@Path("user")
 public class UserManagerServiceImpl implements UserManagerService {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserManagerServiceImpl.class);
@@ -119,6 +122,61 @@ public class UserManagerServiceImpl implements UserManagerService {
     public UserManagerSettings getSettings() {
         final UserManager serviceImpl = getService();
         return serviceImpl.getSettings();
+    }
+
+    @Path("password/{id}")
+    @PUT
+    public void changePasswordByRest(
+            @PathParam("id") String id,
+            @QueryParam("password") String password)
+    {
+        changePassword(id, password);
+    }
+
+    @Path("roles/{id}")
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void assignRolesByRest(
+            @PathParam("id") String id,
+            Collection<String> roles)
+    {
+        assignRoles(id, roles);
+    }
+
+    @Path("groups/{id}")
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void assignGroupsByRest(
+            @PathParam("id") String id,
+            Collection<String> groups)
+    {
+        assignGroups(id, groups);
+    }
+
+    @Path("{id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public User getByRest(@PathParam("id") String id)  {
+        return get(id);
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void createByRest(User entity) {
+        create(entity);
+    }
+
+    @Path("{id}")
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void updateByRest(User user) {
+        update(user);
+    }
+
+    @Path("{id}")
+    @DELETE
+    public void deleteByRest(@PathParam("id") String id) {
+        delete(id);
     }
 
 }
