@@ -26,6 +26,7 @@ import org.uberfire.ext.security.management.api.UserManagerSettings;
 import org.uberfire.ext.security.management.api.exception.NoImplementationAvailableException;
 import org.uberfire.ext.security.management.api.exception.SecurityManagementException;
 import org.uberfire.ext.security.management.api.service.UserManagerService;
+import org.uberfire.ext.security.management.util.SecurityManagementUtils;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -124,59 +125,58 @@ public class UserManagerServiceImpl implements UserManagerService {
         return serviceImpl.getSettings();
     }
 
-    @Path("password/{id}")
+    @Path("password/{username}")
     @PUT
     public void changePasswordByRest(
-            @PathParam("id") String id,
+            @PathParam("username") String username,
             @QueryParam("password") String password)
     {
-        changePassword(id, password);
+        changePassword(username, password);
     }
 
-    @Path("roles/{id}")
+    @Path("roles/{username}")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void assignRolesByRest(
-            @PathParam("id") String id,
+            @PathParam("username") String username,
             Collection<String> roles)
     {
-        assignRoles(id, roles);
+        assignRoles(username, roles);
     }
 
-    @Path("groups/{id}")
+    @Path("groups/{username}")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void assignGroupsByRest(
-            @PathParam("id") String id,
+            @PathParam("username") String username,
             Collection<String> groups)
     {
-        assignGroups(id, groups);
+        assignGroups(username, groups);
     }
 
-    @Path("{id}")
+    @Path("{username}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public User getByRest(@PathParam("id") String id)  {
-        return get(id);
+    public User getByRest(@PathParam("username") String username)  {
+        return get(username);
     }
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void createByRest(User entity) {
-        create(entity);
+    public void createByRest(@QueryParam("username") String username) {
+        create(SecurityManagementUtils.createUser(username));
     }
 
-    @Path("{id}")
+    @Path("{username}")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void updateByRest(User user) {
         update(user);
     }
 
-    @Path("{id}")
+    @Path("{username}")
     @DELETE
-    public void deleteByRest(@PathParam("id") String id) {
-        delete(id);
+    public void deleteByRest(@PathParam("username") String username) {
+        delete(username);
     }
 
 }
