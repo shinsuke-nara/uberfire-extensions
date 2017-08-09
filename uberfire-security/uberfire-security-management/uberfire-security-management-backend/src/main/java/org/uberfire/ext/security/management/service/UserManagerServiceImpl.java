@@ -162,7 +162,8 @@ public class UserManagerServiceImpl implements UserManagerService {
     }
 
     @POST
-    public void createByRest(@QueryParam("username") String username) {
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void createByRest(String username) {
         create(SecurityManagementUtils.createUser(username));
     }
 
