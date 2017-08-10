@@ -127,9 +127,10 @@ public class UserManagerServiceImpl implements UserManagerService {
 
     @Path("password/{username}")
     @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
     public void changePasswordByRest(
             @PathParam("username") String username,
-            @QueryParam("password") String password)
+            String password)
     {
         changePassword(username, password);
     }
